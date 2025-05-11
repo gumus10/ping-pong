@@ -66,6 +66,7 @@ racket1 = Player('racket.png', 5, win_height - 100, 80, 100, 10)
 racket2 = Player('racket.png', 595, win_height - 100, 80, 100, 10)
 ball = GameSprite('tenis_ball.png',300,win_height - 50,50,50,10)
 
+
 #переменная "игра закончилась": как только там True, в основном цикле перестают работать спрайты
 finish = False
 #основной цикл игры:
@@ -73,6 +74,9 @@ run = True #флаг сбрасывается кнопкой закрытия о
 clock = time.Clock()
 start = timer()
 Reload = False
+
+speed_x = 3
+speed_y = 3 
 while run:
     #событие нажатия на кнопку Закрыть
     window.fill(back)
@@ -86,6 +90,12 @@ while run:
 
     ball.update()
     ball.reset()
+    if finish != True:  
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
+
+    if sprite.collide_rect(racket1, ball) or sprite.collide_rect(racket2, ball):
+          speed_x *= -1
 
     for e in event.get():
         if e.type == QUIT:
