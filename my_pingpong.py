@@ -7,7 +7,12 @@ from time import time as timer
 
 
 #нам нужны такие картинки:
+font.init()
+font1 = font.Font(None, 35)
+lose1 = font1.render('PLAYER 1 LOSE',True,(180,0,0))
 
+font1 = font.Font(None, 35)
+lose2 = font1.render('PLAYER 2 LOSE',True,(180,0,0))
 #класс-родитель для других спрайтов
 class GameSprite(sprite.Sprite):
  #конструктор класса
@@ -62,8 +67,8 @@ window = display.set_mode((win_width, win_height))
 #background = transform.scale(image.load(img_back), (win_width, win_height))
 window.fill(back)
 #создаём ракетки
-racket1 = Player('racket.png', 5, win_height - 100, 80, 100, 10)
-racket2 = Player('racket.png', 595, win_height - 100, 80, 100, 10)
+racket1 = Player('racket.png', 5, win_height - 100, 50, 100, 10)
+racket2 = Player('racket.png', 645, win_height - 100, 50, 100, 10)
 ball = GameSprite('tenis_ball.png',300,win_height - 50,50,50,10)
 
 
@@ -74,6 +79,7 @@ run = True #флаг сбрасывается кнопкой закрытия о
 clock = time.Clock()
 start = timer()
 Reload = False
+
 
 speed_x = 3
 speed_y = 3 
@@ -94,12 +100,23 @@ while run:
         ball.rect.x += speed_x
         ball.rect.y += speed_y
 
-    if sprite.collide_rect(racket1, ball) or sprite.collide_rect(racket2, ball):
-          speed_x *= -1
+    if ball.rect.y > win_height - 50 or ball.rect.y < 0:
+        speed_y *= -1
+
+    if sprite.collide_rect(racket1,ball) or sprite.collide_rect(racket2,ball):
+        speed_x *= -1
 
     for e in event.get():
         if e.type == QUIT:
             run = False
+
+    if ball.rect.x < -1:
+        finish = True
+        window.blit(lose1,(200,200))
+
+    if ball.rect.x > 690:
+        finish = True
+        window.blit(lose2,(200,200))
         #событие нажатия на пробел - спрайт стреляет
 
  
